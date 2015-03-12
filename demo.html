@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div class="container">
+    <button class="btn-test">.btn-test</button>
+    <input type="text" class="input-test" placeholder=".input-test"/>
+</div>
+<script type="text/javascript" src="delegate-events.js"></script>
+<script type="text/javascript">
+    delegate(document.body, {
+        'click .btn-test': function () {
+            alert('button');
+        },
+        'focus .input-test': function (e) {
+            alert('focus')
+        }
+    })
+</script>
+</body>
+</html>
