@@ -23,11 +23,18 @@
         return ['blur', 'error', 'focus', 'load', 'resize', 'scroll'].indexOf(eventType) !== -1;
     }
 
-    function getEventHandler(elRoot, selector, method) {
+    function getEventHandler(rootElement, selector, method) {
         return function (e) {
-            if (isEventTarget(elRoot, e.target, selector)) {
-                method.apply(e.target, arguments);
-            }
+            var result = true,
+                stopElement = e.currentTarget,
+                targetElement = e.target;
+            do {
+                if (isEventTarget(rootElement, targetElement, selector)) {
+                    e.target = targetElement;
+                    result = method.apply(targetElement, arguments);
+                }
+            } while (result && targetElement != stopElement && (targetElement = targetElement.parentNode));
+            return result;
         }
     }
 
