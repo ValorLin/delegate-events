@@ -1,6 +1,6 @@
 ;
 (function () {
-    window.delegate = function (elRoot, events) {
+    window.delegate = function (rootElement, events) {
         var arr, key, eventType, method, selector;
 
         for (key in events) {
@@ -10,9 +10,9 @@
                 selector = arr.join(' ');
                 method = events[key];
 
-                elRoot.addEventListener(
+                rootElement.addEventListener(
                     eventType,
-                    getEventHandler(elRoot, selector, method),
+                    getEventHandler(rootElement, selector, method),
                     shouldUseCapture(eventType)
                 );
             }
@@ -41,10 +41,10 @@
         }
     }
 
-    function isEventTarget(elRoot, elChild, selector) {
-        var nodeList = elRoot.querySelectorAll(selector);
+    function isEventTarget(rootElement, childElement, selector) {
+        var nodeList = rootElement.querySelectorAll(selector);
         for (var key in nodeList) {
-            if (nodeList.hasOwnProperty(key) && nodeList[key] === elChild) {
+            if (nodeList.hasOwnProperty(key) && nodeList[key] === childElement) {
                 return true;
             }
         }
