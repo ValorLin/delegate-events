@@ -30,7 +30,10 @@
                 targetElement = e.target;
             do {
                 if (isEventTarget(rootElement, targetElement, selector)) {
+
+                    delete e.target;
                     e.target = targetElement;
+
                     result = method.apply(targetElement, arguments);
                 }
             } while (result && targetElement != stopElement && (targetElement = targetElement.parentNode));
