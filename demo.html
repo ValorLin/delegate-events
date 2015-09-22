@@ -11,22 +11,29 @@
     </div>
     <input type="text" class="input-test" placeholder=".input-test"/>
 </div>
+<div id="messages"></div>
 <script type="text/javascript" src="delegate-events.js"></script>
 <script type="text/javascript">
     delegate(document.body, {
         'click .btn-test': function () {
-            alert('button');
-            return false;
-        },
-        'click .btn-wrap': function () {
-            alert('wrap');
+            writeMessage('click .btn-test');
             return true;
         },
-        'focus .input-test': function (e) {
-            alert('focus');
-            return false;
+        'click .btn-wrap': function () {
+            writeMessage('click .btn-wrap');
+        },
+        'focus .input-test': function () {
+            writeMessage('focus .input-test');
+        },
+        'blur .input-test': function () {
+            writeMessage('blur .input-test');
         }
-    })
+    });
+
+    var messagesEl = document.getElementById('messages');
+    function writeMessage(msg) {
+        messagesEl.innerText += msg + '\n';
+    }
 </script>
 </body>
 </html>
