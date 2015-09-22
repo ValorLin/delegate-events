@@ -2,38 +2,74 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title></title>
+    <title>delegate-events Demo</title>
+    <style type="text/css">
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .btn-wrap {
+            padding: 10px 0;
+        }
+
+        #messages {
+            max-height: 300px;
+            margin-top: 20px;
+            overflow: auto;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
+    <h1>delegate-events Demo</h1>
+
     <div class="btn-wrap">
         <button class="btn-test">.btn-test</button>
+        <button class="btn-with-event-bubbling">.btn-with-event-bubbling</button>
+        <button class="btn-clear">.btn-clear</button>
     </div>
     <input type="text" class="input-test" placeholder=".input-test"/>
+
+    <div id="messages"></div>
 </div>
-<div id="messages"></div>
 <script type="text/javascript" src="delegate-events.js"></script>
 <script type="text/javascript">
     delegate(document.body, {
         'click .btn-test': function () {
-            writeMessage('click .btn-test');
+            Message.add('click .btn-test');
+        },
+        'click .btn-with-event-bubbling': function () {
+            Message.add('click .btn-with-event-bubbling');
             return true;
         },
         'click .btn-wrap': function () {
-            writeMessage('click .btn-wrap');
+            Message.add('click .btn-wrap');
+        },
+        'click .btn-clear': function () {
+            Message.clear();
         },
         'focus .input-test': function () {
-            writeMessage('focus .input-test');
+            Message.add('focus .input-test');
         },
         'blur .input-test': function () {
-            writeMessage('blur .input-test');
+            Message.add('blur .input-test');
+        },
+        'input .input-test': function () {
+            Message.add('input .input-test value:' + this.value);
         }
     });
 
-    var messagesEl = document.getElementById('messages');
-    function writeMessage(msg) {
-        messagesEl.innerText += msg + '\n';
-    }
+    var Message = {
+        el: document.getElementById('messages'),
+        add: function (msg) {
+            this.el.innerText += msg + '\n';
+            this.el.scrollTop = 99999;
+        },
+        clear: function () {
+            this.el.innerText = '';
+        }
+    };
 </script>
 </body>
 </html>
