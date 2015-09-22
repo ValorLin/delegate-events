@@ -6,7 +6,9 @@
 </head>
 <body>
 <div class="container">
-    <button class="btn-test">.btn-test</button>
+    <div class="btn-wrap">
+        <button class="btn-test">.btn-test</button>
+    </div>
     <input type="text" class="input-test" placeholder=".input-test"/>
 </div>
 <script type="text/javascript" src="delegate-events.js"></script>
@@ -14,9 +16,15 @@
     delegate(document.body, {
         'click .btn-test': function () {
             alert('button');
+            return false;
+        },
+        'click .btn-wrap': function () {
+            alert('wrap');
+            return true;
         },
         'focus .input-test': function (e) {
-            alert('focus')
+            alert('focus');
+            return false;
         }
     })
 </script>

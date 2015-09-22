@@ -1,7 +1,8 @@
 ;
 (function () {
     window.delegate = function (rootElement, events) {
-        var arr, key, eventType, method, selector;
+        var arr, key, eventType, method, selector,
+            delegatesEvents = {};
 
         for (key in events) {
             if (events.hasOwnProperty(key)) {
@@ -10,9 +11,19 @@
                 selector = arr.join(' ');
                 method = events[key];
 
+                delegatesEvents[eventType] = delegatesEvents[eventType] || [];
+                delegatesEvents[eventType].push({
+                    selector: selector,
+                    method: method
+                });
+            }
+        }
+
+        for (eventType in delegatesEvents) {
+            if (delegatesEvents.hasOwnProperty(eventType)) {
                 rootElement.addEventListener(
                     eventType,
-                    getEventHandler(rootElement, selector, method),
+                    getEventHandler(rootElement, delegatesEvents[eventType]),
                     shouldUseCapture(eventType)
                 );
             }
@@ -23,21 +34,27 @@
         return ['blur', 'error', 'focus', 'load', 'resize', 'scroll'].indexOf(eventType) !== -1;
     }
 
-    function getEventHandler(rootElement, selector, method) {
+    function getEventHandler(rootElement, delegates) {
         return function (e) {
-            var result = true,
+            var selector, method, i,
+                bubble = true,
                 stopElement = e.currentTarget,
                 targetElement = e.target;
             do {
-                if (isEventTarget(rootElement, targetElement, selector)) {
+                for (i = 0; i < delegates.length; i++) {
+                    selector = delegates[i].selector;
+                    method = delegates[i].method;
+                    if (isEventTarget(rootElement, targetElement, selector)) {
 
-                    delete e.target;
-                    e.target = targetElement;
+                        // e.target won't change if we don't delete it.
+                        delete e.target;
+                        e.target = targetElement;
 
-                    result = method.apply(targetElement, arguments);
+                        bubble = method.apply(targetElement, arguments);
+                    }
                 }
-            } while (result && targetElement != stopElement && (targetElement = targetElement.parentNode));
-            return result;
+            } while (bubble && targetElement != stopElement && (targetElement = targetElement.parentNode));
+            return bubble;
         }
     }
 
