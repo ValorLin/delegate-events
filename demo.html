@@ -9,8 +9,10 @@
             margin: 0 auto;
         }
 
-        .btn-wrap {
-            padding: 10px 0;
+        .btn-wrap,
+        .input-wrap,
+        .radio-wrap {
+            margin-top: 20px;
         }
 
         #messages {
@@ -29,24 +31,31 @@
         <button class="btn-with-event-bubbling">.btn-with-event-bubbling</button>
         <button class="btn-clear">.btn-clear</button>
     </div>
-    <input type="text" class="input-test" placeholder=".input-test"/>
-
+    <div class="input-wrap">
+        <input type="text" class="input-test" placeholder=".input-test"/>
+    </div>
+    <div class="radio-wrap">
+        <label><input type="radio" name="radio-test" value="1"/>radio 1</label>
+        <label><input type="radio" name="radio-test" value="2"/>radio 2</label>
+        <label><input type="radio" name="radio-test" value="3"/>radio 3</label>
+        <label><input type="radio" name="radio-test" value="4"/>radio 4</label>
+    </div>
     <div id="messages"></div>
 </div>
 <script type="text/javascript" src="delegate-events.js"></script>
 <script type="text/javascript">
     delegate(document.body, {
-        'click .btn-test': function () {
+        'click .btn-wrap .btn-test': function () {
             Message.add('click .btn-test');
         },
-        'click .btn-with-event-bubbling': function () {
+        'click .btn-wrap .btn-with-event-bubbling': function () {
             Message.add('click .btn-with-event-bubbling');
             return true;
         },
         'click .btn-wrap': function () {
             Message.add('click .btn-wrap');
         },
-        'click .btn-clear': function () {
+        'click .btn-wrap .btn-clear': function () {
             Message.clear();
         },
         'focus .input-test': function () {
@@ -55,8 +64,11 @@
         'blur .input-test': function () {
             Message.add('blur .input-test');
         },
-        'input .input-test': function () {
-            Message.add('input .input-test value:' + this.value);
+        'input .input-test': function (e) {
+            Message.add('input .input-test value:' + e.target.value);
+        },
+        'change input[type=radio]': function (e) {
+            Message.add('change input[type=radio] value:' + e.target.value);
         }
     });
 
