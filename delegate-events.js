@@ -21,9 +21,10 @@
 
         for (eventType in delegatesEvents) {
             if (delegatesEvents.hasOwnProperty(eventType)) {
+                // Bind event for each type of event
                 rootElement.addEventListener(
                     eventType,
-                    getEventHandler(rootElement, delegatesEvents[eventType]),
+                    createEventHandler(rootElement, delegatesEvents[eventType]),
                     shouldUseCapture(eventType)
                 );
             }
@@ -34,7 +35,7 @@
         return ['blur', 'error', 'focus', 'load', 'resize', 'scroll'].indexOf(eventType) !== -1;
     }
 
-    function getEventHandler(rootElement, delegates) {
+    function createEventHandler(rootElement, delegates) {
         return function (e) {
             var selector, method, i,
                 bubble = true,
