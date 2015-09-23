@@ -46,17 +46,25 @@
                     selector = delegates[i].selector;
                     method = delegates[i].method;
                     if (isEventTarget(rootElement, targetElement, selector)) {
-
-                        // e.target won't change if we don't delete it.
-                        delete e.target;
-                        e.target = targetElement;
-
-                        bubble = method.apply(targetElement, arguments);
+                        e = createEvent(e, targetElement);
+                        bubble = method.call(targetElement, e);
                     }
                 }
             } while (bubble && targetElement != stopElement && (targetElement = targetElement.parentNode));
             return bubble;
         }
+    }
+
+    function createEvent(e, target) {
+        var EventClass = e.constructor;
+        var fixed = new EventClass(e.type, e);
+        addProperty(fixed, 'target', target);
+        addProperty(fixed, 'currentTarget', e.currentTarget);
+        return fixed;
+    }
+
+    function addProperty(obj, prop, val) {
+        Object.defineProperty(obj, prop, {value: val, enumerable: true});
     }
 
     function isEventTarget(rootElement, childElement, selector) {
