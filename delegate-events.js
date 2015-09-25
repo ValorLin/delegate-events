@@ -40,27 +40,29 @@
             var selector, method, i,
                 bubble = true,
                 stopElement = e.currentTarget,
-                targetElement = e.target;
+                currentTarget = e.target;
             do {
                 for (i = 0; i < delegates.length; i++) {
                     selector = delegates[i].selector;
                     method = delegates[i].method;
-                    if (isEventTarget(rootElement, targetElement, selector)) {
-                        e = createEvent(e, targetElement);
-                        bubble = method.call(targetElement, e);
+                    if (isEventTarget(rootElement, currentTarget, selector)) {
+                        e = createEvent(e, stopElement, currentTarget);
+                        bubble = method.call(currentTarget, e);
+                        if(bubble !== false){
+                            // Default: bubble is true
+                            bubble = true;
+                        }
                     }
                 }
-            } while (bubble && targetElement != stopElement && (targetElement = targetElement.parentNode));
+            } while (bubble && currentTarget != stopElement && (currentTarget = currentTarget.parentNode));
             return bubble;
         }
     }
 
-    function createEvent(e, target) {
-        var EventClass = e.constructor;
-        var fixed = new EventClass(e.type, e);
-        addProperty(fixed, 'target', target);
-        addProperty(fixed, 'currentTarget', e.currentTarget);
-        return fixed;
+    function createEvent(e, stopElement, currentTarget) {
+        addProperty(e, 'target', stopElement);
+        addProperty(e, 'currentTarget', currentTarget);
+        return e;
     }
 
     function addProperty(obj, prop, val) {

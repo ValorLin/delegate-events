@@ -65,10 +65,10 @@
             Message.add('blur .input-test');
         },
         'input .input-test': function (e) {
-            Message.add('input .input-test value:' + e.target.value);
+            Message.add('input .input-test value:' + e.currentTarget.value);
         },
         'change input[type=radio]': function (e) {
-            Message.add('change input[type=radio] value:' + e.target.value);
+            Message.add('change input[type=radio] value:' + e.currentTarget.value);
         }
     });
 
