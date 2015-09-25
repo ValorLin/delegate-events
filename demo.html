@@ -48,15 +48,16 @@
         'click .btn-wrap .btn-test': function () {
             Message.add('click .btn-test');
         },
-        'click .btn-wrap .btn-with-event-bubbling': function () {
-            Message.add('click .btn-with-event-bubbling');
-            return true;
+        'click .btn-wrap .btn-without-event-bubbling': function () {
+            Message.add('click .btn-without-event-bubbling');
+            return false;
         },
         'click .btn-wrap': function (e) {
             Message.add('click .btn-wrap');
         },
         'click .btn-wrap .btn-clear': function () {
             Message.clear();
+            return false;
         },
         'focus .input-test': function () {
             Message.add('focus .input-test');
