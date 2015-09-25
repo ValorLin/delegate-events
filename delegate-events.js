@@ -60,9 +60,11 @@
     }
 
     function createEvent(e, stopElement, currentTarget) {
-        addProperty(e, 'target', stopElement);
-        addProperty(e, 'currentTarget', currentTarget);
-        return e;
+        var EventClass = e.constructor;
+        var fixed = new EventClass(e.type, e);
+        addProperty(fixed, 'target', stopElement);
+        addProperty(fixed, 'currentTarget', currentTarget);
+        return fixed;
     }
 
     function addProperty(obj, prop, val) {
